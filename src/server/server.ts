@@ -1,10 +1,22 @@
 import express from "express";
+import { router as indexRouter } from '../routes/index.js';
+import productsRouter from "../routes/products.js";
 
-export const server = express();
+const server = express();
 
 server.use(express.json());
 
-server.get("/", (req, res) => {
-  res.send("Servidor funcionando!");
-});
+// Rota principal
+server.use("/", indexRouter);
+
+//Rotas Products
+server.use("/products", productsRouter);
+
+
+export {server};
+
+
+
+
+
 
