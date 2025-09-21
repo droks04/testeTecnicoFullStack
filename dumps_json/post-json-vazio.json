@@ -1,0 +1,40 @@
+{
+  "name": "",
+  "reference": "",
+  "gender": "",
+  "description": "",
+  "type": "",
+  "prompt_delivery": false,
+  "company_id": null,
+  "brand_id": null,
+  "category_id": null,
+  "subcategory_id": null,
+  "erp_id": null,
+  "deadline_id": null,
+  "category_order": 0,
+  "composition_data": "",
+  "technical_information": "",
+  "open_grid": false,
+  "ipi": 0.0,
+  "is_discontinued": false,
+  "is_launch": false,
+  "is_visible": true,
+  "colection": "",
+  "st": 0.0,
+  "variants": [
+    {
+      "name": "",
+      "hex_code": "",
+      "skus": [
+        {
+          "size": "",
+          "price": "0.00",
+          "stock": 0,
+          "min_quantity": 1,
+          "multiple_quantity": 1,
+          "code": ""
+        }
+      ]
+    }
+  ]
+}

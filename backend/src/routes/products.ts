@@ -5,6 +5,7 @@ import { postProducts } from "../controllers/productController.js";
 import { putProducts } from "../controllers/productController.js";
 import { deleteProducts } from "../controllers/productController.js";
 import { countProducts } from "../controllers/productController.js";
+import { SearchReference } from "../controllers/productController.js";
 
 const productsRouter = Router();
 
@@ -25,7 +26,10 @@ productsRouter.post("/", postProducts);
 productsRouter.put("/:id", putProducts);
 
 // Soft delete
-productsRouter.delete("/:id", deleteProducts)
+productsRouter.delete("/:id", deleteProducts);
+
+//GET Seach reference
+productsRouter.get("/search?", SearchReference);
 
 
 

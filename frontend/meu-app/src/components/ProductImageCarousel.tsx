@@ -162,10 +162,34 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
           <SearchIcon/>
         </SearchButton>
         <SearchModal
-              isOpen={isSearchOpen}
-              onClose={closeSearchModal}
-              onSearch={(value) => console.log("Buscando:", value)}
-            />
+  isOpen={isSearchOpen}
+  onClose={closeSearchModal}
+  onSearch={async (value: string) => {
+    try {
+      const response = await fetch(`http://localhost:3333/products/search?reference=${value}`);
+
+      if (response.status === 404) {
+        alert("Produto não encontrado!");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar produto");
+      }
+
+      const product = await response.json();
+      console.log("Produto encontrado:", product);
+
+      // aqui você pode salvar no estado se quiser renderizar depois
+      // setProdutoEncontrado(product);
+
+    } catch (error) {
+      console.error("Erro ao buscar produto:", error);
+      alert("Erro ao buscar produto");
+    }
+  }}
+/>
+
 
         <InfoButton onClick={openModal}>i</InfoButton>     
         <InfoModal

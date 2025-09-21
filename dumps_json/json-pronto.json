@@ -1,0 +1,64 @@
+{
+  "name": "Camiseta One Piece Luffy Wanted",
+  "reference": "01.00.0001",
+  "gender": "MASCULINO",
+  "description": "Camiseta branca One Piece Luffy Wanted Algodão Unissex.",
+  "type": "IMPORTADO",
+  "prompt_delivery": false,
+  "company_id": 1,
+  "brand_id": 1,
+  "category_id": 1,
+  "subcategory_id": 46,
+  "erp_id": "null",
+  "deadline_id": null,
+  "category_order": 0,
+  "composition_data": "100% algodão",
+  "technical_information": "Lavável à máquina",
+  "open_grid": false,
+  "ipi": 0.0,
+  "is_discontinued": false,
+  "is_launch": true,
+  "is_visible": true,
+  "colection": "One Piece 2025",
+  "st": 0.0,
+  "variants": [
+    {
+      "name": "Branco",
+      "hex_code": "#FFFFFF",
+      "skus": [
+        {
+          "size": "P",
+          "price": "79.00",
+          "stock": 80,
+          "min_quantity": 2,
+          "multiple_quantity": 1,
+          "code": "SKU001"
+        },
+        {
+          "size": "M",
+          "price": "79.00",
+          "stock": 0,
+          "min_quantity": 2,
+          "multiple_quantity": 1,
+          "code": "SKU002"
+        },
+        {
+          "size": "G",
+          "price": "79.00",
+          "stock": 80,
+          "min_quantity": 2,
+          "multiple_quantity": 1,
+          "code": "SKU003"
+        },
+        {
+          "size": "GG",
+          "price": "79.00",
+          "stock": 0,
+          "min_quantity": 2,
+          "multiple_quantity": 1,
+          "code": "SKU004"
+        }
+      ]
+    }
+  ]
+}
