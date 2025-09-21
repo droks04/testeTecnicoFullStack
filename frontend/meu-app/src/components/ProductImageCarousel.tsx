@@ -29,6 +29,11 @@ const Image = styled.img`
     max-height: 124vw; 
     min-height: 124vw; 
   }
+
+   @media screen and (max-height: 667px) {
+    max-height: 100vw; 
+    min-height: 100vw; 
+  }
 `;
 
 

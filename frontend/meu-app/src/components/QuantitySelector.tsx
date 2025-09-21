@@ -6,6 +6,10 @@ const Container = styled.div`
   align-items: center;
   gap: 8px;
   margin: 10px 0px 18px 0px;
+  
+    @media screen and (max-height: 668px) {
+     margin: 0px;
+  }
 `;
 
 const Button = styled.button`

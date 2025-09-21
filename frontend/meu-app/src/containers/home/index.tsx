@@ -51,6 +51,10 @@ export const ProductFooter = styled.footer`
   @media (max-width: 480px) {
     gap: 6px;
   }
+
+    @media (max-height: 668px) {
+       height: 152px;
+  }
 `;
 
 

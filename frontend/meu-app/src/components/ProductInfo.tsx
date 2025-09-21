@@ -7,6 +7,10 @@ const InfoContainer = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
+
+    @media screen and (max-height: 668px) {
+     margin: 0px 0px -6px 0px;
+  }
 `;
 
 const Name = styled.p`

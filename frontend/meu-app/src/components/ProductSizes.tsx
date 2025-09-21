@@ -11,6 +11,11 @@ const SizesContainer = styled.div`
   justify-content: center;
   align-items: flex-end; /* garante que os botões fiquem alinhados */
   padding: 16px;
+
+   @media screen and (max-height: 850px) {
+     margin: 0px;
+  }
+
 `;
 
 const SizeWrapper = styled.div`
