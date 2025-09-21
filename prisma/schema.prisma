@@ -91,36 +91,37 @@ model price_tables_skus {
 }
 
 model products {
-  id                    Int             @id @default(autoincrement())
-  name                  String          @db.VarChar(255)
-  reference             String          @db.VarChar(30)
+  id                    Int              @id @default(autoincrement())
+  name                  String           @db.VarChar(255)
+  reference             String           @db.VarChar(30)
   type                  products_type
   gender                products_gender
   prompt_delivery       Boolean
-  description           String?         @db.VarChar(255)
+  description           String?          @db.VarChar(255)
   company_id            Int
-  erp_id                String?         @db.VarChar(37)
+  erp_id                String?          @db.VarChar(37)
   brand_id              Int
   deadline_id           Int?
-  created_at            DateTime        @default(now()) @db.Timestamp(0)
-  updated_at            DateTime?       @db.Timestamp(0)
-  deleted_at            DateTime?       @db.Timestamp(0)
-  category_id           Int             @db.UnsignedInt
-  subcategory_id        Int?            @db.UnsignedInt
-  category_order        Int?            @default(0) @db.TinyInt
-  composition_data      String?         @db.VarChar(255)
-  technical_information String?         @db.VarChar(255)
-  open_grid             Boolean         @default(false)
-  ipi                   Decimal         @default(0.0000) @db.Decimal(5, 4)
-  is_discontinued       Boolean         @default(false)
-  is_launch             Boolean         @default(false)
-  is_visible            Boolean         @default(true)
-  colection             String?         @db.VarChar(255)
-  st                    Decimal         @default(0.0000) @db.Decimal(5, 4)
-  brands                brands          @relation(fields: [brand_id], references: [id], onDelete: Cascade, map: "fk_brands_company")
-  categories            categories      @relation(fields: [category_id], references: [id], onDelete: Cascade, map: "fk_categories_products")
-  companies             companies       @relation(fields: [company_id], references: [id], onDelete: Cascade, map: "fk_products_company")
-  subcategories         subcategories?  @relation(fields: [subcategory_id], references: [id], onDelete: Cascade, map: "fk_subcategories_products")
+  created_at            DateTime         @default(now()) @db.Timestamp(0)
+  updated_at            DateTime?        @db.Timestamp(0)
+  deleted_at            DateTime?        @db.Timestamp(0)
+  category_id           Int              @db.UnsignedInt
+  subcategory_id        Int?             @db.UnsignedInt
+  category_order        Int?             @default(0) @db.TinyInt
+  composition_data      String?          @db.VarChar(255)
+  technical_information String?          @db.VarChar(255)
+  open_grid             Boolean          @default(false)
+  ipi                   Decimal          @default(0.0000) @db.Decimal(5, 4)
+  is_discontinued       Boolean          @default(false)
+  is_launch             Boolean          @default(false)
+  is_visible            Boolean          @default(true)
+  colection             String?          @db.VarChar(255)
+  st                    Decimal          @default(0.0000) @db.Decimal(5, 4)
+  product_images        product_images[]
+  brands                brands           @relation(fields: [brand_id], references: [id], onDelete: Cascade, map: "fk_brands_company")
+  categories            categories       @relation(fields: [category_id], references: [id], onDelete: Cascade, map: "fk_categories_products")
+  companies             companies        @relation(fields: [company_id], references: [id], onDelete: Cascade, map: "fk_products_company")
+  subcategories         subcategories?   @relation(fields: [subcategory_id], references: [id], onDelete: Cascade, map: "fk_subcategories_products")
   variants              variants[]
 
   @@unique([erp_id, company_id], map: "products_erpId_companyId_key")
@@ -181,6 +182,16 @@ model variants {
 
   @@unique([name, product_id], map: "unique_variant_name_product_id")
   @@index([product_id], map: "fk_variants_products")
+}
+
+model product_images {
+  id         Int       @id @default(autoincrement())
+  product_id Int
+  url        String    @db.VarChar(500)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  products   products  @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "product_images_ibfk_1")
+
+  @@index([product_id], map: "product_id")
 }
 
 enum products_type {
