@@ -32,7 +32,7 @@ Siga os passos abaixo para iniciar o backend e frontend localmente:
 
 1. **Clone o repositório**
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/droks04/testeTecnicoFullStack.git
 ```
 2. **Inicie o backend**
 ```bash
