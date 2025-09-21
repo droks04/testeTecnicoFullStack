@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "6c049a22-6ab5-4f21-ac69-e3c5dab264d6",
+		"name": "ecatalogos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41005274"
+	},
+	"item": [
+		{
+			"name": "getProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postProducts",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Camiseta One Piece Luffy Wanted\",\r\n  \"reference\": \"01.00.0001\",\r\n  \"gender\": \"MASCULINO\",\r\n  \"description\": \"Camiseta branca One Piece Luffy Wanted Algodão Unissex.\",\r\n  \"type\": \"IMPORTADO\",\r\n  \"prompt_delivery\": false,\r\n  \"company_id\": 1,\r\n  \"brand_id\": 1,\r\n  \"category_id\": 1,\r\n  \"subcategory_id\": 46,\r\n  \"erp_id\": \"null\",\r\n  \"deadline_id\": null,\r\n  \"category_order\": 0,\r\n  \"composition_data\": \"100% algodão\",\r\n  \"technical_information\": \"Lavável à máquina\",\r\n  \"open_grid\": false,\r\n  \"ipi\": 0.0,\r\n  \"is_discontinued\": false,\r\n  \"is_launch\": true,\r\n  \"is_visible\": true,\r\n  \"colection\": \"One Piece 2025\",\r\n  \"st\": 0.0,\r\n  \"variants\": [\r\n    {\r\n      \"name\": \"Branco\",\r\n      \"hex_code\": \"#FFFFFF\",\r\n      \"skus\": [\r\n        {\r\n          \"size\": \"P\",\r\n          \"price\": \"79.00\",\r\n          \"stock\": 80,\r\n          \"min_quantity\": 2,\r\n          \"multiple_quantity\": 1,\r\n          \"code\": \"SKU001\"\r\n        },\r\n        {\r\n          \"size\": \"M\",\r\n          \"price\": \"79.00\",\r\n          \"stock\": 0,\r\n          \"min_quantity\": 2,\r\n          \"multiple_quantity\": 1,\r\n          \"code\": \"SKU002\"\r\n        },\r\n        {\r\n          \"size\": \"G\",\r\n          \"price\": \"79.00\",\r\n          \"stock\": 80,\r\n          \"min_quantity\": 2,\r\n          \"multiple_quantity\": 1,\r\n          \"code\": \"SKU003\"\r\n        },\r\n        {\r\n          \"size\": \"GG\",\r\n          \"price\": \"79.00\",\r\n          \"stock\": 0,\r\n          \"min_quantity\": 2,\r\n          \"multiple_quantity\": 1,\r\n          \"code\": \"SKU004\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3333/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "softDeleteProducts",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "putProducts",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 97,\r\n    \"name\": \"Camiseta One Piece Luffy\",\r\n    \"reference\": \"01.00.0001\",\r\n    \"type\": \"IMPORTADO\",\r\n    \"gender\": \"MASCULINO\",\r\n    \"prompt_delivery\": false,\r\n    \"description\": \"Camiseta branca One Piece Luffy Wanted Algodão Unissex.\",\r\n    \"company_id\": 1,\r\n    \"erp_id\": \"null\",\r\n    \"brand_id\": 1,\r\n    \"deadline_id\": null,\r\n    \"created_at\": \"2025-09-21T18:18:53.000Z\",\r\n    \"updated_at\": null,\r\n    \"deleted_at\": null,\r\n    \"category_id\": 1,\r\n    \"subcategory_id\": 46,\r\n    \"category_order\": 0,\r\n    \"composition_data\": \"100% algodão\",\r\n    \"technical_information\": \"Lavável à máquina\",\r\n    \"open_grid\": false,\r\n    \"ipi\": \"0\",\r\n    \"is_discontinued\": false,\r\n    \"is_launch\": true,\r\n    \"is_visible\": true,\r\n    \"colection\": \"One Piece 2025\",\r\n    \"st\": \"0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3333/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFilters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/productsFilters/filters",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"productsFilters",
+						"filters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/products/count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"products",
+						"count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSearchReference",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
