@@ -180,9 +180,6 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
       const product = await response.json();
       console.log("Produto encontrado:", product);
 
-      // aqui você pode salvar no estado se quiser renderizar depois
-      // setProdutoEncontrado(product);
-
     } catch (error) {
       console.error("Erro ao buscar produto:", error);
       alert("Erro ao buscar produto");

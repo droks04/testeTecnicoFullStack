@@ -9,7 +9,7 @@ const baseUrl = "http://localhost:3333/";
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const products = await prisma.products.findMany({
-  take: 3, // apenas os 3 primeiros produtos
+  take: 3,
   select: {
     id: true,
     name: true,
@@ -51,7 +51,6 @@ export const getProducts = async (req: Request, res: Response) => {
 });
 
 
-    // mapear as imagens para URL completa
     const result = products.map((product) => ({
       ...product,
       images: product.product_images.map((img) => `${baseUrl}${img.url}`),
@@ -78,23 +77,23 @@ try {
         type: true,
         prompt_delivery: true,
 
-        // pega apenas o nome da categoria
+   
         categories: { select: { name: true } },
 
-        // pega apenas o nome da subcategoria
+   
         subcategories: { select: { name: true } },
 
-        // pega apenas o nome da marca
+      
         brands: { select: { name: true } },
 
-        // pega apenas a chave da empresa
-        companies: { select: { id: true } }, // se a "key" for outro campo, ajusta aqui
+    
+        companies: { select: { id: true } },
 
-        // pega as variants
+
         variants: {
           select: {
             id: true,
-            name: true,      // no seu exemplo aparece como "variant_name"
+            name: true,
             hex_code: true,
             skus: {
               select: {
@@ -106,7 +105,7 @@ try {
               },
               where: {
                 price_tables_skus: {
-                  some: {}, // garante que só traga skus que tenham preços cadastrados
+                  some: {},
                 },
               },
             },
@@ -115,7 +114,7 @@ try {
           product_images: {
           select: {
             id: true,
-            url: true,  // retorna o caminho da imagem
+            url: true, 
           },
         },
       },
@@ -160,7 +159,6 @@ export const postProducts = async (req: Request, res: Response) => {
     colection: req.body.colection,
     st: req.body.st,
 
-    // nested variants e skus
     variants: {
       create: req.body.variants?.map((variant: any) => ({
         name: variant.name,
@@ -221,7 +219,7 @@ export const putProducts = async (req: Request, res: Response) => {
 
         variants: {
           upsert: req.body.variants?.map((variant: any) => ({
-            where: { id: variant.id ?? 0 }, // se existir, atualiza; se não, cria novo
+            where: { id: variant.id ?? 0 }, 
             update: {
               name: variant.name,
               hex_code: variant.hex_code,
@@ -280,7 +278,7 @@ export const deleteProducts = async (req: Request, res: Response) => {
   try {
     const product = await prisma.products.update({
       where: { id: Number(id) },
-      data: { deleted_at: new Date() }, // marca como deletado
+      data: { deleted_at: new Date() }, 
     });
     res.json({ message: "Produto deletado (soft delete)", product });
   } catch (err: any) {
@@ -291,7 +289,7 @@ export const deleteProducts = async (req: Request, res: Response) => {
 //Filters
 export const productsFilters = async (req: Request, res: Response) => {
   try {
-      // Brands com nome
+     
       const brandsRaw = await prisma.products.groupBy({
         by: ["brand_id"],
         _count: { id: true },
@@ -310,7 +308,7 @@ export const productsFilters = async (req: Request, res: Response) => {
         })
       );
 
-      // Types
+    
       const typesRaw = await prisma.products.groupBy({
         by: ["type"],
         _count: { id: true },
@@ -321,7 +319,7 @@ export const productsFilters = async (req: Request, res: Response) => {
         quantity: t._count.id,
       }));
 
-      // Genders
+     
       const gendersRaw = await prisma.products.groupBy({
         by: ["gender"],
         _count: { id: true },
@@ -332,7 +330,7 @@ export const productsFilters = async (req: Request, res: Response) => {
         quantity: g._count.id,
       }));
 
-      // Categories + subcategories
+   
       const categoriesRaw = await prisma.products.groupBy({
         by: ["category_id", "subcategory_id"],
         _count: { id: true },
@@ -341,7 +339,7 @@ export const productsFilters = async (req: Request, res: Response) => {
       const categoriesMap: Record<number, { name: string | null; quantity: number; subcategories: any[] }> = {};
 
       for (const c of categoriesRaw) {
-        // Buscar nome da categoria
+     
         const category = await prisma.categories.findUnique({
           where: { id: c.category_id },
         });
@@ -354,7 +352,6 @@ export const productsFilters = async (req: Request, res: Response) => {
           };
         }
 
-        // Incrementa quantidade da categoria
         categoriesMap[c.category_id].quantity += c._count.id;
 
         if (c.subcategory_id) {
@@ -370,7 +367,6 @@ export const productsFilters = async (req: Request, res: Response) => {
 
       const categories = Object.values(categoriesMap);
 
-      // Prompt delivery
       const promptDeliveryRaw = await prisma.products.groupBy({
         by: ["prompt_delivery"],
         _count: { id: true },
@@ -409,10 +405,9 @@ export const SearchReference = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Parâmetro reference é obrigatório" });
     }
 
-    // Usando findFirst, pois reference não é unique
     const product = await prisma.products.findFirst({
       where: {
-        reference: reference, // ou String(reference)
+        reference: reference,
       },
       include: {
         brands: true,
