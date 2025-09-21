@@ -1,5 +1,7 @@
 # Projeto Teste Técnico - Ecatalogos
 
+ <h3>⚠️ A tela front-end foi desenvolvida pensando em dispositivos móveis, coloque o navegador na opção de dispositivo móvel.</h3>
+
 Este projeto foi desenvolvido como parte do **teste técnico** para a empresa **Ecatalogos**.  
 
 Trata-se de uma **tela de visualização de produtos**, onde é possível **criar um carrinho de compras temporário** e **adicionar ou remover produtos** dinamicamente.
