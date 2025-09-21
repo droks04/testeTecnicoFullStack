@@ -29,7 +29,7 @@ productsRouter.put("/:id", putProducts);
 productsRouter.delete("/:id", deleteProducts);
 
 //GET Seach reference
-productsRouter.get("/search?", SearchReference);
+productsRouter.get("/search", SearchReference);
 
 
 
