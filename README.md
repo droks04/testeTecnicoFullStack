@@ -12,7 +12,8 @@ Trata-se de uma **tela de visualização de produtos**, onde é possível **cria
 - **Backend:** Node.js + Express  
 - **Banco de Dados:** MariaDB  
 - **ORM:** Prisma  
-- **Gerenciador de Pacotes:** Yarn  
+- **Gerenciador de Pacotes:** Yarn
+- **API:** RESTFUL 
 
 ---
 
@@ -60,7 +61,12 @@ Abra no navegador para testar todas as funcionalidades
   [Corpo JSON para teste PUT](.testeTecnico2/dumps_json/json-pronto.json)  
 
 - **Dump da tabela de imagens**  
-  Contém a estrutura da tabela que foi criada para armazenar os caminhos das imagens, permitindo retorná-las pelo servidor.
+  Contém a estrutura da tabela que foi criada para armazenar os caminhos das imagens, permitindo retorná-las pelo servidor.  
   [Corpo JSON para teste PUT](.testeTecnico2/dumps_json/tabela_images.sql)  
   > Observação: além dessa tabela, **nenhuma outra tabela foi criada**. Todas as demais tabelas utilizadas são as fornecidas na dump disponibilizada.
+
+- **Collection do postman**
+  Contém a collection que usei para testar os métodos.  
+  [Collection Postman](.testeTecnico2/dumps_json/ecatalogos.postman_collection.json)
+  
 
