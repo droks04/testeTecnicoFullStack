@@ -16,20 +16,20 @@ productsRouter.get("/count", countProducts)
 // GET todos os produtos ativos
 productsRouter.get("/", getProducts);
 
+// POST /products
+productsRouter.post("/", postProducts);
+
+//GET Seach reference
+productsRouter.get("/search", SearchReference); 
+
 // GET produto por id (ativo)
 productsRouter.get("/:id", getProductsId);
 
-// POST /products
-productsRouter.post("/", postProducts);
- 
 //Metodo PUT
 productsRouter.put("/:id", putProducts);
 
 // Soft delete
 productsRouter.delete("/:id", deleteProducts);
-
-//GET Seach reference
-productsRouter.get("/search", SearchReference);
 
 
 

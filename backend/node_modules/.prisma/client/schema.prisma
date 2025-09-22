@@ -93,7 +93,7 @@ model price_tables_skus {
 model products {
   id                    Int              @id @default(autoincrement())
   name                  String           @db.VarChar(255)
-  reference             String           @db.VarChar(30)
+  reference             String           @unique(map: "unique_reference") @db.VarChar(30)
   type                  products_type
   gender                products_gender
   prompt_delivery       Boolean

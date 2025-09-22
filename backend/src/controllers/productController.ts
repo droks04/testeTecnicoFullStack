@@ -405,23 +405,45 @@ export const SearchReference = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Parâmetro reference é obrigatório" });
     }
 
-    const product = await prisma.products.findFirst({
-      where: {
-        reference: reference,
+
+ const product = await prisma.products.findUnique({
+  where: { reference: String(reference) },
+  include: {
+    brands: {
+      select: {
+        id: true,
+        name: true,
       },
+    },
+    categories: {
+      select: {
+        id: true,
+        name: true,
+      },
+    },
+    product_images: true,
+    variants: {
       include: {
-        brands: true,
-        categories: true,
+        skus: true,
       },
-    });
+    },
+  },
+});
 
     if (!product) {
       return res.status(404).json({ message: "Produto não encontrado" });
     }
 
-    return res.json(product);
+    const safeProduct = {
+      ...product,
+      brands: product.brands ?? { id: null, name: "Desconhecido" },
+      categories: product.categories ?? { id: null, name: "Desconhecido" }
+    };
+
+    console.log("Produto encontrado:", safeProduct);
+    return res.json(safeProduct);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao buscar produto:", error);
     return res.status(500).json({ message: "Erro ao buscar produto", error });
   }
 };
