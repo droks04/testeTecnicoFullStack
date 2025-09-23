@@ -8,7 +8,7 @@ import ProductSizes from "../../components/ProductSizes.tsx";
 import QuantitySelector from "../../components/QuantitySelector.tsx";
 import ProductHeader from "../../components/ProductHeader.tsx";
 import { SearchModal } from "../../components/SearchModal.tsx";
-import api from  "../../services/api.js"
+import api from  "../../services/api"
 
 const ProductheaderContainer = styled.header`
   width: 100%;

@@ -1,4 +1,4 @@
-import { server } from "./server/server.js"; 
+import { server } from "./server/server"; 
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";

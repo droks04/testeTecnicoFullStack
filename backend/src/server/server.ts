@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import { router as indexRouter } from '../routes/index.js';
-import productsRouter from "../routes/products.js";
-import { productsFiltersRouter } from "../routes/productsFilters.js";
+import { router as indexRouter } from '../routes/index';
+import productsRouter from "../routes/products";
+import { productsFiltersRouter } from "../routes/productsFilters";
 
 const server = express();
 
