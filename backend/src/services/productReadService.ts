@@ -4,8 +4,19 @@ const baseUrl = "http://localhost:3333/";
 
 // GET todos os produtos ativos
 export const getProducts = async () => {
-  const products = await prisma.products.findMany({
-    where: { deleted_at: null },
+    const products = await prisma.products.findMany({
+    where: { 
+      deleted_at: null,
+      variants: {
+        some: {
+          skus: {
+            some: {
+              price_tables_skus: { some: {} } // garante pelo menos um preço
+            }
+          }
+        }
+      }
+    },
     select: {
       id: true,
       name: true,
@@ -17,12 +28,16 @@ export const getProducts = async () => {
           id: true,
           name: true,
           skus: {
+            where: {
+              price_tables_skus: { some: {} } // filtra apenas SKUs com preço
+            },
             select: {
               id: true,
               size: true,
               price: true,
               stock: true,
-              min_quantity: true,
+              multiple_quantity: true,
+              price_tables_skus: { select: { price_table_id: true } },
             },
           },
         },
@@ -31,18 +46,38 @@ export const getProducts = async () => {
     },
   });
 
-  return products.map((product) => ({
-    ...product,
-    images: product.product_images.map((img) => `${baseUrl}${img.url}`),
-  }));
+  const filteredProducts = products.map((product) => {
+    const validVariants = product.variants.filter((variant) => {
+      if (!variant.skus.length) return false;
+
+      const priceTableIdsPerSku = variant.skus.map(sku =>
+        sku.price_tables_skus.map(pt => pt.price_table_id)
+      );
+
+      const firstSkuTables = priceTableIdsPerSku[0] || [];
+
+      return priceTableIdsPerSku.every(ids =>
+        ids.length === firstSkuTables.length &&
+        ids.every(id => firstSkuTables.includes(id))
+      );
+    });
+
+    return {
+      ...product,
+      variants: validVariants,
+      images: product.product_images.map((img) => `${baseUrl}${img.url}`),
+    };
+  });
+
+  return filteredProducts.filter(p => p.variants.length > 0);
 };
 
 // GET produto por id (ativo)
 export const getProductsId = async (id: number) => {
-  return prisma.products.findFirst({
+   const product = await prisma.products.findFirst({
     where: {
       id,
-      deleted_at: null, // garante que só traz produtos não deletados
+      deleted_at: null,
     },
     select: {
       id: true,
@@ -55,12 +90,40 @@ export const getProductsId = async (id: number) => {
         select: {
           id: true,
           name: true,
-          skus: { select: { id: true, size: true, price: true } },
+          skus: { 
+            select: { 
+              id: true, 
+              size: true, 
+              price: true, 
+              multiple_quantity: true,
+              price_tables_skus: { select: { price_table_id: true } }
+            } 
+          },
         },
       },
       product_images: { select: { id: true, url: true } },
     },
   });
+
+  if (!product) return null;
+
+  // Filtra variantes cujos SKUs estão todos na mesma tabela de preço
+  const filteredVariants = product.variants.filter(variant => {
+    if (!variant.skus.length) return false;
+
+    const priceTableIdsPerSku = variant.skus.map(sku =>
+      sku.price_tables_skus.map(pt => pt.price_table_id)
+    );
+
+    const firstSkuTables = priceTableIdsPerSku[0] || [];
+
+    return priceTableIdsPerSku.every(ids =>
+      ids.length === firstSkuTables.length &&
+      ids.every(id => firstSkuTables.includes(id))
+    );
+  });
+
+  return { ...product, variants: filteredVariants };
 };
 
 //GET reference

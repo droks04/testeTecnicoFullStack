@@ -54,6 +54,7 @@ export const ProductFooter = styled.footer`
   }
 `;
 
+// Interfaces unificadas
 interface Product {
   name: string;
   reference: string;
@@ -64,17 +65,27 @@ interface Product {
 }
 
 interface Variant {
+  id: number;
+  name: string;
   skus: Sku[];
 }
 
 interface Sku {
+  id: number;
+  size: string;
   price: string;
+  multiple_quantity: number;
 }
 
 interface ProductImage {
   id: number;
   url: string;
 }
+
+interface ProductSizesProps {
+  skus: Sku[];
+}
+
 
 const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -196,7 +207,8 @@ const nextProduct = () => {
       price: parseFloat(currentProduct?.variants?.[0]?.skus?.[0]?.price || '0'),
     }}
   />
-  <ProductSizes />
+<ProductSizes skus={currentProduct?.variants?.[0]?.skus || []}  />
+
 </ProductFooter>
     </>
   );

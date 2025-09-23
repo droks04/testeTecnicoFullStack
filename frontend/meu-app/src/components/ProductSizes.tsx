@@ -71,35 +71,30 @@ const Span = styled.span`
   color: white;
 `;
 
-const ProductSizes: React.FC = () => {
+interface ProductSizesProps {
+  skus: { price: string; multiple_quantity: number; size: string; id?: number }[];
+}
+
+const ProductSizes: React.FC<ProductSizesProps> = ({ skus }) => {
+  if (!skus || skus.length === 0) return null;
+
+  const totalQuantity = skus.reduce((acc, sku) => acc + sku.multiple_quantity, 0);
+
   return (
     <SizesContainer>
-      <SizeWrapper>
-        <CircleLabel>P</CircleLabel>
-        <SizeButton className="size-btn">1</SizeButton>
-      </SizeWrapper>
-
-      <SizeWrapper>
-        <CircleLabel>M</CircleLabel>
-        <SizeButton className="size-btn">1</SizeButton>
-      </SizeWrapper>
-
-      <SizeWrapper>
-        <CircleLabel>G</CircleLabel>
-        <SizeButton className="size-btn">1</SizeButton>
-      </SizeWrapper>
-
-      <SizeWrapper>
-        <CircleLabel>GG</CircleLabel>
-        <SizeButton className="size-btn">1</SizeButton>
-      </SizeWrapper>
+      {skus.map((sku) => (
+        <SizeWrapper key={sku.id}>
+          <CircleLabel>{sku.size}</CircleLabel>
+          <SizeButton>{sku.multiple_quantity}</SizeButton>
+        </SizeWrapper>
+      ))}
 
       <Span>=</Span>
 
-    <SizeWrapper>
-      <CircleLabels>Pack</CircleLabels>
-      <SizeButton className="size-btn">4</SizeButton>
-    </SizeWrapper>
+      <SizeWrapper>
+        <CircleLabels>Pack</CircleLabels>
+        <SizeButton>{totalQuantity}</SizeButton>
+      </SizeWrapper>
     </SizesContainer>
   );
 };
