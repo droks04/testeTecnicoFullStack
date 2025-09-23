@@ -6,7 +6,6 @@ const baseUrl = "http://localhost:3333/";
 export const getProducts = async () => {
   const products = await prisma.products.findMany({
     where: { deleted_at: null },
-    take: 3,
     select: {
       id: true,
       name: true,
@@ -67,7 +66,10 @@ export const getProductsId = async (id: number) => {
 //GET reference
 export const findProductByReference = async (reference: string) => {
   return prisma.products.findFirst({
-    where: { reference },
+     where: {
+      reference,
+      deleted_at: null,
+    },
     include: {
       brands: true,
       categories: true,

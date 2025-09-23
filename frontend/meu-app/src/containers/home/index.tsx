@@ -78,60 +78,86 @@ interface ProductImage {
 
 const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [categories, setCategories] = useState<string[]>([]);
+
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     api.get("/products")
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        const allProducts: Product[] = res.data;
+        setProducts(allProducts);
+
+        // Extrai categorias únicas
+        const uniqueCategories = Array.from(new Set(allProducts.map(p => p.categories.name)));
+        setCategories(uniqueCategories);
+      })
       .catch((err) => console.error(err));
   }, []);
 
-  const currentProduct = products[currentIndex];
+const filteredProducts = products.filter(
+      p => p.categories.name === categories[currentCategoryIndex]
+    );
 
-  // Funções de modal
-  const openSearchModal = () => setIsSearchOpen(true);
-  const closeSearchModal = () => setIsSearchOpen(false);
+const currentProduct = filteredProducts[currentProductIndex];
 
-  // Função de busca por referência
-  const handleSearch = async (value: string) => {
+
+const openSearchModal = () => setIsSearchOpen(true);
+const closeSearchModal = () => setIsSearchOpen(false);
+
+
+ const handleSearch = async (value: string) => {
     const reference = value.trim();
     try {
       const response = await api.get(`/products/search?reference=${reference}`);
-
-      if (response.status === 404) {
-        alert("Produto não encontrado!");
-        return;
-      }
-
       const product: Product = response.data;
 
-      // Atualiza o array de produtos com apenas o produto encontrado
       setProducts([product]);
-      setCurrentIndex(0);
+      setCategories([product.categories.name]);
+      setCurrentCategoryIndex(0);
+      setCurrentProductIndex(0);
       closeSearchModal();
     } catch (error) {
       console.error("Erro ao buscar produto:", error);
-      alert("Erro ao buscar produto");
+      alert("Produto não encontrado!");
     }
   };
 
-  if (!products.length)
-    return (
-      <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <p>Carregando...</p>
-      </div>
-    );
+// Navegação entre produtos na categoria
+const nextProduct = () => {
+    setCurrentProductIndex((prev) => (prev + 1) % filteredProducts.length);
+  };
+  const prevProduct = () => {
+    setCurrentProductIndex((prev) => (prev - 1 + filteredProducts.length) % filteredProducts.length);
+  };
+
+// Navegação entre categorias
+  const nextCategory = () => {
+    setCurrentCategoryIndex((prev) => (prev + 1) % categories.length);
+    setCurrentProductIndex(0); // reset para primeiro produto
+  };
+  const prevCategory = () => {
+    setCurrentCategoryIndex((prev) => (prev - 1 + categories.length) % categories.length);
+    setCurrentProductIndex(0); // reset para primeiro produto
+  };
 
   return (
     <>
       {currentProduct && (
         <ProductheaderContainer>
-          <ProductHeader
-            title={currentProduct.name}
-            currentIndex={currentIndex}
-            total={products.length}
-            onChange={setCurrentIndex}
+         <ProductHeader
+            title={categories[currentCategoryIndex]} 
+            currentIndex={currentProductIndex}
+            total={filteredProducts.length}
+            onChange={setCurrentProductIndex} 
+            prev={prevProduct}
+            next={nextProduct}
+            prevCategory={prevCategory}
+            nextCategory={nextCategory}
           />
         </ProductheaderContainer>
       )}
@@ -143,17 +169,17 @@ const App: React.FC = () => {
       />
 
       <ContainerCarousel>
-  {currentProduct && (
-    <ProductImageCarousel 
-      images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
-      content={{
-        name: currentProduct.name,
-        reference: currentProduct.reference,
-        brand: currentProduct.brands.name,
-        category: currentProduct.categories.name
-      }}
-    />
-  )}
+        {currentProduct && (
+          <ProductImageCarousel 
+            images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
+            content={{
+              name: currentProduct.name,
+              reference: currentProduct.reference,
+              brand: currentProduct.brands.name,
+              category: currentProduct.categories.name
+            }}
+          />
+        )}
 </ContainerCarousel>
 
 <ProductFooter>

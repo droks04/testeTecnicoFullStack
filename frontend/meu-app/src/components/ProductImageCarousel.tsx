@@ -128,6 +128,8 @@ interface ProductImageCarouselProps {
 }
 
 const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, content }) => {
+  
+
   const [current, setCurrent] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);

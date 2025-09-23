@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { getProducts, getProductsId, postProducts, putProducts ,deleteProducts, countProducts, SearchReference} from "../controllers/productController";
+import { validateProduct } from "../middlewares/validateNewProduct";
+import { validateIdParam } from "../middlewares/validateIdParam";
 
 const productsRouter = Router();
 
@@ -11,13 +13,13 @@ productsRouter.get("/count", countProducts)
 productsRouter.get("/", getProducts);
 
 // POST /products
-productsRouter.post("/", postProducts);
+productsRouter.post("/", validateProduct, postProducts);
 
 //GET Seach reference
 productsRouter.get("/search", SearchReference); 
 
 // GET produto por id (ativo)
-productsRouter.get("/:id", getProductsId);
+productsRouter.get("/:id", validateIdParam, getProductsId);
 
 //Metodo PUT
 productsRouter.put("/:id", putProducts);

@@ -73,25 +73,34 @@ interface ProductHeaderProps {
   currentIndex: number;
   total: number;
   onChange: (newIndex: number) => void;
+  prev: () => void; 
+  next: () => void; 
+  prevCategory: () => void; 
+  nextCategory: () => void; 
 }
 
 const ProductHeader: React.FC<ProductHeaderProps> = ({
   title,
   currentIndex,
   total,
-  onChange
+  prev,
+  next,
+  prevCategory,
+  nextCategory
 }) => {
-  const prev = () => onChange(currentIndex === 0 ? total - 1 : currentIndex - 1);
-  const next = () => onChange(currentIndex === total - 1 ? 0 : currentIndex + 1);
 
-  return (
+ return (
     <MainContainer>
       <BackButton />
 
       <CenterGroup>
-        <LeftArrow onClick={prev}>◀</LeftArrow>
+        <LeftArrow onClick={prevCategory}>⏴</LeftArrow>
+
+
         <ItemLabel>{title}</ItemLabel>
-        <RightArrow onClick={next}>▶</RightArrow>
+
+
+        <RightArrow onClick={nextCategory}>⏵</RightArrow>
       </CenterGroup>
 
       <FButton>F</FButton>
@@ -99,3 +108,4 @@ const ProductHeader: React.FC<ProductHeaderProps> = ({
   );
 };
 export default ProductHeader;
+
