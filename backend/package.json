@@ -1,9 +1,8 @@
 {
   "name": "testetecnico2",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/index.ts"
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
