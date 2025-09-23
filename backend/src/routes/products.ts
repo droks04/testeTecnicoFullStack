@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProducts, getProductsId, postProducts, putProducts ,deleteProducts, countProducts, SearchReference} from "../controllers/productController";
+import { getProducts, getProductsId, postProducts, putProducts ,deleteProducts, countProducts, SearchReference } from "../controllers/productController";
 import { validateProduct } from "../middlewares/validateNewProduct";
 import { validateIdParam } from "../middlewares/validateIdParam";
 
@@ -26,7 +26,5 @@ productsRouter.put("/:id", putProducts);
 
 // Soft delete
 productsRouter.delete("/:id", deleteProducts);
-
-
 
 export default productsRouter;

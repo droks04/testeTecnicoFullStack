@@ -125,9 +125,13 @@ interface ProductImageCarouselProps {
     brand: string;
     category: string;
   };
+   onProductChange?: (newIndex: number) => void;
+    totalProducts?: number; 
+    currentIndex?: number; 
 }
 
-const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, content }) => {
+const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, content, onProductChange,  totalProducts = 1,
+  currentIndex = 0}) => {
   
 
   const [current, setCurrent] = useState(0);
@@ -148,8 +152,16 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
     setProductData(content);
   }, [content]);
 
-  const prev = () => setCurrent((c) => (c === 0 ? productImages.length - 1 : c - 1));
-  const next = () => setCurrent((c) => (c === productImages.length - 1 ? 0 : c + 1));
+  // Buscar próximo ou anterior produto na mesma categoria
+  const prevProduct = () => {
+    const newIndex = (currentIndex - 1 + totalProducts) % totalProducts;
+    if (typeof onProductChange === "function") onProductChange(newIndex);
+  };
+
+  const nextProduct = () => {
+    const newIndex = (currentIndex + 1) % totalProducts;
+    if (typeof onProductChange === "function") onProductChange(newIndex);
+  };
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -187,8 +199,8 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
   return (
     <CarouselContainer>
       <MainImgContainer>
-        <LeftArrow onClick={prev}>◀</LeftArrow>
-        <RightArrow onClick={next}>▶</RightArrow>
+        <LeftArrow onClick={prevProduct}>◀</LeftArrow>
+        <RightArrow onClick={nextProduct}>▶</RightArrow>
         <Image src={productImages[current]} alt="Produto" />
       </MainImgContainer>
 

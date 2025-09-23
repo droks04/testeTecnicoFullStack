@@ -92,7 +92,6 @@ const App: React.FC = () => {
         const allProducts: Product[] = res.data;
         setProducts(allProducts);
 
-        // Extrai categorias únicas
         const uniqueCategories = Array.from(new Set(allProducts.map(p => p.categories.name)));
         setCategories(uniqueCategories);
       })
@@ -105,8 +104,6 @@ const filteredProducts = products.filter(
 
 const currentProduct = filteredProducts[currentProductIndex];
 
-
-const openSearchModal = () => setIsSearchOpen(true);
 const closeSearchModal = () => setIsSearchOpen(false);
 
 
@@ -170,15 +167,18 @@ const nextProduct = () => {
 
       <ContainerCarousel>
         {currentProduct && (
-          <ProductImageCarousel 
-            images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
-            content={{
-              name: currentProduct.name,
-              reference: currentProduct.reference,
-              brand: currentProduct.brands.name,
-              category: currentProduct.categories.name
-            }}
-          />
+         <ProductImageCarousel 
+  images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
+  content={{
+    name: currentProduct.name,
+    reference: currentProduct.reference,
+    brand: currentProduct.brands.name,
+    category: currentProduct.categories.name
+  }}
+  currentIndex={currentProductIndex}
+  totalProducts={filteredProducts.length}
+  onProductChange={setCurrentProductIndex}
+/>
         )}
 </ContainerCarousel>
 

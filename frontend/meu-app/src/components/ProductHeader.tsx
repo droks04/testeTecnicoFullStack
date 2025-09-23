@@ -81,10 +81,6 @@ interface ProductHeaderProps {
 
 const ProductHeader: React.FC<ProductHeaderProps> = ({
   title,
-  currentIndex,
-  total,
-  prev,
-  next,
   prevCategory,
   nextCategory
 }) => {
