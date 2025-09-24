@@ -1,5 +1,4 @@
 import './styles.css'
-
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ProductImageCarousel from "../../components/ProductImageCarousel.tsx";
@@ -8,6 +7,7 @@ import ProductSizes from "../../components/ProductSizes.tsx";
 import QuantitySelector from "../../components/QuantitySelector.tsx";
 import ProductHeader from "../../components/ProductHeader.tsx";
 import { SearchModal } from "../../components/SearchModal.tsx";
+import { InfoModal } from "../../components/infoModal.tsx";
 import api from  "../../services/api"
 
 const ProductheaderContainer = styled.header`
@@ -54,7 +54,6 @@ export const ProductFooter = styled.footer`
   }
 `;
 
-// Interfaces unificadas
 interface Product {
   name: string;
   reference: string;
@@ -90,7 +89,16 @@ const App: React.FC = () => {
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+//Variaveis para manipulação das modais
+const [isSearchOpen, setIsSearchOpen] = useState(false);
+const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+const openSearchModal = () => setIsSearchOpen(true);
+const closeSearchModal = () => setIsSearchOpen(false);
+
+const openInfoModal = () => setIsInfoOpen(true);
+const closeInfoModal = () => setIsInfoOpen(false);
+
 
   const [quantities, setQuantities] = useState<{ 
   [productId: string]: { quantity: number; currentValue: number } 
@@ -114,25 +122,19 @@ const filteredProducts = products.filter(
 
 const currentProduct = filteredProducts[currentProductIndex];
 
-const closeSearchModal = () => setIsSearchOpen(false);
 
+const handleSearch = (reference: string) => {
+  const foundIndex = filteredProducts.findIndex(
+    (p) => p.reference.toLowerCase() === reference.toLowerCase()
+  );
 
- const handleSearch = async (value: string) => {
-    const reference = value.trim();
-    try {
-      const response = await api.get(`/products/search?reference=${reference}`);
-      const product: Product = response.data;
-
-      setProducts([product]);
-      setCategories([product.categories.name]);
-      setCurrentCategoryIndex(0);
-      setCurrentProductIndex(0);
-      closeSearchModal();
-    } catch (error) {
-      console.error("Erro ao buscar produto:", error);
-      alert("Produto não encontrado!");
-    }
-  };
+  if (foundIndex !== -1) {
+    setCurrentProductIndex(foundIndex);
+    setIsSearchOpen(false);
+  } else {
+    alert("Produto não encontrado");
+  }
+};
 
 // Navegação entre produtos na categoria
 const nextProduct = () => {
@@ -145,11 +147,11 @@ const nextProduct = () => {
 // Navegação entre categorias
   const nextCategory = () => {
     setCurrentCategoryIndex((prev) => (prev + 1) % categories.length);
-    setCurrentProductIndex(0); // reset para primeiro produto
+    setCurrentProductIndex(0);
   };
   const prevCategory = () => {
     setCurrentCategoryIndex((prev) => (prev - 1 + categories.length) % categories.length);
-    setCurrentProductIndex(0); // reset para primeiro produto
+    setCurrentProductIndex(0); 
   };
 
   return (
@@ -168,28 +170,41 @@ const nextProduct = () => {
           />
         </ProductheaderContainer>
       )}
-
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={closeSearchModal}
-        onSearch={handleSearch}
-      />
-
       <ContainerCarousel>
         {currentProduct && (
          <ProductImageCarousel 
-  images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
-  content={{
-    name: currentProduct.name,
-    reference: currentProduct.reference,
-    brand: currentProduct.brands.name,
-    category: currentProduct.categories.name
-  }}
-  currentIndex={currentProductIndex}
-  totalProducts={filteredProducts.length}
-  onProductChange={setCurrentProductIndex}
-/>
+            images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
+            content={{
+              name: currentProduct.name,
+              reference: currentProduct.reference,
+              brand: currentProduct.brands.name,
+              category: currentProduct.categories.name
+            }}
+            currentIndex={currentProductIndex}
+            totalProducts={filteredProducts.length}
+            onProductChange={setCurrentProductIndex}
+            onOpenSearch={openSearchModal}
+            onOpenInfo={openInfoModal}
+        />
         )}
+
+         <SearchModal
+          isOpen={isSearchOpen}
+          onClose={closeSearchModal}
+          onSearch={handleSearch}
+        />
+
+        <InfoModal
+            isOpen={isInfoOpen}
+            onClose={closeInfoModal}
+            title="Informações do Produto"
+            content={{
+              name: currentProduct?.name || "",
+              reference: currentProduct?.reference || "",
+              brand: currentProduct?.brands?.name || "",
+              category: currentProduct?.categories?.name || "",
+            }}
+          />
 </ContainerCarousel>
 
 <ProductFooter>

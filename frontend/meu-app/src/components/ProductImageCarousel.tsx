@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { IoInformationSharp } from "react-icons/io5";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
-import { InfoModal } from "../components/infoModal.js";
-import { SearchModal } from "../components/SearchModal.tsx";
 
 const CarouselContainer = styled.div`
   display: flex;
@@ -125,18 +123,23 @@ interface ProductImageCarouselProps {
     brand: string;
     category: string;
   };
-   onProductChange?: (newIndex: number) => void;
-    totalProducts?: number; 
-    currentIndex?: number; 
+  currentIndex?: number;
+  totalProducts?: number;
+  onProductChange?: (newIndex: number) => void;
+  onOpenSearch: () => void; 
+  onOpenInfo: () => void;   
 }
 
-const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, content, onProductChange,  totalProducts = 1,
-  currentIndex = 0}) => {
-  
-
+const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
+  images,
+  content,
+  currentIndex = 0,
+  totalProducts = 1,
+  onProductChange,
+  onOpenSearch,
+  onOpenInfo,
+}) => {
   const [current, setCurrent] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [productData, setProductData] = useState(content);
   const [productImages, setProductImages] = useState(images);
@@ -163,39 +166,6 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
     if (typeof onProductChange === "function") onProductChange(newIndex);
   };
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-  const openSearchModal = () => setIsSearchOpen(true);
-  const closeSearchModal = () => setIsSearchOpen(false);
-
-  const handleSearch = async (value: string) => {
-    const reference = value.trim();
-    try {
-      const response = await fetch(`http://localhost:3333/products/search?reference=${reference}`);
-      if (response.status === 404) {
-        alert("Produto não encontrado!");
-        return;
-      }
-      if (!response.ok) throw new Error("Erro ao buscar produto");
-
-      const product = await response.json();
-      console.log("Produto encontrado:", product);
-
-      setProductData({
-        name: product.name,
-        reference: product.reference,
-        brand: product.brands.name,
-        category: product.categories.name,
-      });
-      setProductImages(product.product_images.map((img: any) => `http://localhost:3333/${img.url}`));
-      setCurrent(0);
-      closeSearchModal();
-    } catch (error) {
-      console.error("Erro ao buscar produto:", error);
-      alert("Erro ao buscar produto");
-    }
-  };
-
   return (
     <CarouselContainer>
       <MainImgContainer>
@@ -205,14 +175,11 @@ const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({ images, con
       </MainImgContainer>
 
       <Thumbnails>
-        <SearchButton onClick={openSearchModal}>
+        <SearchButton onClick={onOpenSearch}>
           <SearchIcon />
         </SearchButton>
 
-        <SearchModal isOpen={isSearchOpen} onClose={closeSearchModal} onSearch={handleSearch} />
-
-        <InfoButton onClick={openModal}>i</InfoButton>
-        <InfoModal isOpen={isOpen} onClose={closeModal} title="Informações do Produto" content={productData} />
+        <InfoButton onClick={onOpenInfo}>i</InfoButton>
 
         {productImages.map((img, index) => (
           <Thumbnail key={index} src={img} active={index === current} onClick={() => setCurrent(index)} />

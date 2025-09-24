@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 
@@ -79,7 +79,14 @@ const SearchButton = styled.button`
 `;
 
 export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose, onSearch }) => {
-  const [value, setValue] = React.useState("");
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchValue.trim()) return;
+    onSearch(searchValue);
+    setSearchValue("");
+  };
 
   if (!isOpen) return null;
 
@@ -90,14 +97,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose, onSea
         <Input
           type="text"
           placeholder="Digite a referência..."
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={searchValue}
+         onChange={(e) => setSearchValue(e.target.value)}
         />
         <ButtonClose onClick={onClose}>×</ButtonClose>
-        <SearchButton onClick={() => onSearch(value)}>Buscar</SearchButton>
+        <SearchButton onClick={handleSearch}>Buscar</SearchButton>
       </ModalContainer>
     </Overlay>
   );
 };
+
 
 

@@ -129,13 +129,33 @@ export const getProductsId = async (id: number) => {
 //GET reference
 export const findProductByReference = async (reference: string) => {
   return prisma.products.findFirst({
-     where: {
+      where: {
       reference,
       deleted_at: null,
     },
-    include: {
-      brands: true,
-      categories: true,
+    select: {
+      id: true,
+      name: true,
+      reference: true,
+      description: true,
+      categories: { select: { name: true } },
+      brands: { select: { name: true } },
+      variants: {
+        select: {
+          id: true,
+          name: true,
+          skus: { 
+            select: { 
+              id: true, 
+              size: true, 
+              price: true, 
+              multiple_quantity: true,
+              price_tables_skus: { select: { price_table_id: true } }
+            } 
+          },
+        },
+      },
+      product_images: { select: { id: true, url: true } },
     },
   });
 };
