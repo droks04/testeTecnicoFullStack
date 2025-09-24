@@ -82,11 +82,6 @@ interface ProductImage {
   url: string;
 }
 
-interface ProductSizesProps {
-  skus: Sku[];
-}
-
-
 const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -96,6 +91,10 @@ const App: React.FC = () => {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const [quantities, setQuantities] = useState<{ 
+  [productId: string]: { quantity: number; currentValue: number } 
+}>({});
 
   useEffect(() => {
     api.get("/products")
@@ -201,12 +200,25 @@ const nextProduct = () => {
       ref={currentProduct.reference}
     />
   )}
-  <QuantitySelector
-    product={{
-      id: currentProduct?.name || 'default',
-      price: parseFloat(currentProduct?.variants?.[0]?.skus?.[0]?.price || '0'),
-    }}
-  />
+
+  {currentProduct && (
+    <QuantitySelector
+      productId={currentProduct.reference}
+      skus={currentProduct.variants[0].skus}
+      quantity={quantities[currentProduct.reference]?.quantity || 0}
+      currentValue={quantities[currentProduct.reference]?.currentValue || 0}
+      onChange={(newQuantity, newCurrentValue) => {
+        setQuantities((prev) => ({
+          ...prev,
+          [currentProduct.reference]: {
+            quantity: newQuantity,
+            currentValue: newCurrentValue,
+          },
+        }));
+      }}
+    />
+  )}
+
 <ProductSizes skus={currentProduct?.variants?.[0]?.skus || []}  />
 
 </ProductFooter>

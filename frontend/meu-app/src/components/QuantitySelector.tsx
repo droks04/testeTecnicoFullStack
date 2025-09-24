@@ -58,43 +58,60 @@ const ContainerValorAcumulado = styled.div`
 `;
 
 interface QuantitySelectorProps {
-  product: {
-    id: string;
-    price: number;
-  };
+  productId: string;
+  skus: { price: string; multiple_quantity: number; size: string; id?: number }[];
+  quantity: number;
+  currentValue: number;
+  onChange: (newQuantity: number, newCurrentValue: number) => void;
 }
 
+const QuantitySelector: React.FC<QuantitySelectorProps> = ({
+  productId,
+  skus,
+  quantity,
+  currentValue,
+  onChange,
+}) => {
+  const packValue = skus.reduce(
+    (acc, sku) => acc + Number(sku.price) * sku.multiple_quantity,
+    0
+  );
 
-const QuantitySelector: React.FC<QuantitySelectorProps> = ({ product }) =>{
-   const [quantity, setQuantity] = useState(0);
+   const [acumulados, setAcumulados] = useState<{ [id: string]: number }>({});
 
+  const handleAdd = () => {
+    const newQuantity = quantity + 1;
+    onChange(newQuantity, packValue * newQuantity);
+  };
 
-  const [acumulados, setAcumulados] = useState<{ [id: string]: number }>({});
+  const handleRemove = () => {
+    const newQuantity = Math.max(0, quantity - 1);
+    onChange(newQuantity, packValue * newQuantity);
+  };
 
-  const packSize = 4;
-  const valorAtual = product.price * packSize;
+   useEffect(() => {
+    const novoValorAtual = packValue * quantity;
 
-  const valorAcumulado = acumulados[product.id] ?? 0;
-
-  useEffect(() => {
-    setAcumulados(prev => ({
+    setAcumulados((prev) => ({
       ...prev,
-      [product.id]: quantity > 0 ? valorAtual * quantity : 0,
+      [productId]: novoValorAtual,
     }));
-  }, [quantity, product.id, valorAtual]);
+  }, [quantity, packValue, productId]);
+
+   const valorAcumulado = Object.values(acumulados).reduce((a, b) => a + b, 0);
 
   return (
     <Container>
       <ContainerValorAtual>
         <ValorLabel>Atual</ValorLabel>
-        <ValorAtual>R${valorAtual.toFixed(2)}</ValorAtual>
+        <ValorAtual>R${currentValue.toFixed(2)}</ValorAtual>
       </ContainerValorAtual>
 
-      <Button onClick={() => setQuantity(q => Math.max(0, q - 1))}>-</Button>
+      <Button onClick={handleRemove}>-</Button>
       <Quantity>{quantity}</Quantity>
-      <Button onClick={() => setQuantity(q => q + 1)}>+</Button>
+      <Button onClick={handleAdd}>+</Button>
 
-      <ContainerValorAcumulado>
+       <ContainerValorAcumulado>
         <ValorLabel>Acumulado</ValorLabel>
         <ValorAcumulado>R${valorAcumulado.toFixed(2)}</ValorAcumulado>
       </ContainerValorAcumulado>
