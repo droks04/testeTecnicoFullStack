@@ -77,8 +77,6 @@ interface Sku {
 }
 
 const App: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-
   const [categories, setCategories] = useState<string[]>([]);
 
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
@@ -105,7 +103,6 @@ const [allProducts, setAllProducts] = useState<Product[]>([]);
     .then((res) => {
       const all: Product[] = res.data;
       setAllProducts(all);
-      setProducts(all);
 
       const uniqueCategories = Array.from(new Set(all.map(p => p.categories.name)));
       setCategories(uniqueCategories);
