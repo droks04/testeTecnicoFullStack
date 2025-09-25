@@ -144,7 +144,7 @@
 			"response": []
 		},
 		{
-			"name": "getSearchReference",
+			"name": "getById",
 			"request": {
 				"method": "GET",
 				"header": []

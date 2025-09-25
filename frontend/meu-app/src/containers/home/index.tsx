@@ -94,37 +94,53 @@ const closeSearchModal = () => setIsSearchOpen(false);
 const openInfoModal = () => setIsInfoOpen(true);
 const closeInfoModal = () => setIsInfoOpen(false);
 
+const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-  const [quantities, setQuantities] = useState<{ 
+ const [quantities, setQuantities] = useState<{ 
   [productId: string]: { quantity: number; currentValue: number } 
 }>({});
 
-  useEffect(() => {
-    api.get("/products")
-      .then((res) => {
-        const allProducts: Product[] = res.data;
-        setProducts(allProducts);
+ useEffect(() => {
+  api.get("/products")
+    .then((res) => {
+      const all: Product[] = res.data;
+      setAllProducts(all);
+      setProducts(all);
 
-        const uniqueCategories = Array.from(new Set(allProducts.map(p => p.categories.name)));
-        setCategories(uniqueCategories);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+      const uniqueCategories = Array.from(new Set(all.map(p => p.categories.name)));
+      setCategories(uniqueCategories);
+    })
+    .catch((err) => console.error(err));
+}, []);
 
-const filteredProducts = products.filter(
-      p => p.categories.name === categories[currentCategoryIndex]
-    );
+const filteredProducts = allProducts.filter(
+  (p) => p.categories.name === categories[currentCategoryIndex]
+);
 
 const currentProduct = filteredProducts[currentProductIndex];
 
 
 const handleSearch = (reference: string) => {
-  const foundIndex = filteredProducts.findIndex(
-    (p) => p.reference.toLowerCase() === reference.toLowerCase()
+  const foundIndex = allProducts.findIndex(
+    (product) => product.reference.toLowerCase() === reference.toLowerCase()
   );
 
   if (foundIndex !== -1) {
-    setCurrentProductIndex(foundIndex);
+    const foundProduct = allProducts[foundIndex];
+    const categoryIndex = categories.findIndex(
+      (c) => c === foundProduct.categories.name
+    );
+
+    if (categoryIndex !== -1) {
+      setCurrentCategoryIndex(categoryIndex);
+
+      const productIndexInCategory = allProducts
+        .filter((p) => p.categories.name === foundProduct.categories.name)
+        .findIndex((p) => p.reference.toLowerCase() === reference.toLowerCase());
+
+      setCurrentProductIndex(productIndexInCategory);
+    }
+
     setIsSearchOpen(false);
   } else {
     alert("Produto não encontrado");
