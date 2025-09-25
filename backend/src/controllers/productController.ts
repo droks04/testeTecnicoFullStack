@@ -1,4 +1,3 @@
-// src/controllers/productController.ts
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import * as productReadService from "../services/productReadService";
@@ -41,23 +40,32 @@ export const postProducts = async (req: Request, res: Response) => {
 };
 
 
-//Metodo PUT
+// PUT /products/:id
 export const putProducts = async (req: Request, res: Response) => {
   try {
-    const product = await productWriteService.updateProduct(req.params.id, req.body);
+    const productId = Number(req.params.id);
+    if (isNaN(productId)) {
+      return res.status(400).json({ error: "ID inválido" });
+    }
+    const product = await productWriteService.updateProduct(productId, req.body);
     res.json(product);
   } catch (err) { 
-  console.error("Erro no PUT:", err);
-  res.status(500).json({ error: "Erro ao atualizar produto" }); 
+    console.error("Erro no PUT:", err);
+    res.status(500).json({ error: "Erro ao atualizar produto" }); 
   }
 };
 
-//Delete
+// DELETE /products/:id
 export const deleteProducts = async (req: Request, res: Response) => {
   try {
-    const product = await productWriteService.deleteProduct(req.params.id);
+    const productId = Number(req.params.id);
+    if (isNaN(productId)) {
+      return res.status(400).json({ error: "ID inválido" });
+    }
+    const product = await productWriteService.deleteProduct(productId);
     res.json(product);
   } catch (err) {
+    console.error("Erro no DELETE:", err);
     res.status(500).json({ error: "Erro ao remover produto" });
   }
 };
@@ -80,24 +88,5 @@ export const countProducts = async (req: Request, res: Response) => {
     res.json({ count });
   } catch (err) {
     res.status(500).json({ error: "Erro ao contar produtos" });
-  }
-};
-
-//GET reference
-export const SearchReference = async (req: Request, res: Response) => {
-  try {
-    const { reference } = req.query;
-    if (!reference) {
-      return res.status(400).json({ message: "Parâmetro reference é obrigatório" });
-    }
-
-    const product = await productReadService.findProductByReference(String(reference));
-    if (!product) {
-      return res.status(404).json({ message: "Produto não encontrado" });
-    }
-
-    res.json(product);
-  } catch (err) {
-    res.status(500).json({ error: "Erro ao buscar produto por referência" });
   }
 };

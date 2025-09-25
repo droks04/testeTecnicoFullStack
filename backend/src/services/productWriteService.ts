@@ -1,14 +1,56 @@
+import { products_gender, products_type } from "@prisma/client";
 import { prisma } from "../database/prisma";
+import { ProductCreateDTO, VariantDTO, SkuDTO } from "../models/DTOs/productsWrite.dto";
 
 // POST /products
-export const createProduct = async (data: any) => {
-  return prisma.products.create({
+export const createProduct = async (data: ProductCreateDTO) => {
+  const genderEnum = data.gender as products_gender;
+  const typeEnum = data.type as products_type;
+
+ return prisma.products.create({
+  data: {
+    name: data.name,
+    reference: data.reference,
+    type: typeEnum,
+    gender: genderEnum,
+    prompt_delivery: data.prompt_delivery,
+    description: data.description,
+    companies: { connect: { id: data.company_id } },
+    brands: { connect: { id: data.brand_id } },
+    categories: { connect: { id: data.category_id } },
+    subcategories: data.subcategory_id ? { connect: { id: data.subcategory_id } } : undefined,
+    variants: data.variants
+      ? {
+          create: data.variants.map((variant) => ({
+            name: variant.name,
+            hex_code: variant.hex_code,
+            skus: {
+              create: variant.skus.map((sku) => ({
+                size: sku.size,
+                price: sku.price,
+                stock: sku.stock,
+                min_quantity: sku.min_quantity ?? 1,
+                multiple_quantity: sku.multiple_quantity,
+                code: sku.code ?? "",
+              })),
+            },
+          })),
+        }
+      : undefined,
+  },
+});
+};
+
+// PUT /products/:id
+export const updateProduct = async (id: number, data: Partial<ProductCreateDTO>) => {
+  return prisma.products.update({
+    where: { id },
     data: {
       name: data.name,
       reference: data.reference,
-      gender: data.gender,
       description: data.description,
-      type: data.type,
+      gender: data.gender ? (data.gender as products_gender) : undefined,
+      type: data.type ? (data.type as products_type) : undefined,
       prompt_delivery: data.prompt_delivery,
       company_id: data.company_id,
       brand_id: data.brand_id,
@@ -26,39 +68,34 @@ export const createProduct = async (data: any) => {
       is_visible: data.is_visible,
       colection: data.colection,
       st: data.st,
-
-      variants: {
-        create: data.variants?.map((variant: any) => ({
-          name: variant.name,
-          hex_code: variant.hex_code,
-          skus: {
-            create: variant.skus?.map((sku: any) => ({
-              size: sku.size,
-              price: parseFloat(sku.price),
-              stock: sku.stock,
-              min_quantity: sku.min_quantity ?? 1,
-              multiple_quantity: sku.multiple_quantity ?? 1,
-              code: sku.code ?? "",
+      variants: data.variants
+        ? {
+            // substitui todas as variantes e SKUs
+            deleteMany: {},
+            create: data.variants.map((variant: VariantDTO) => ({
+              name: variant.name,
+              hex_code: variant.hex_code,
+              skus: {
+                create: variant.skus.map((sku: SkuDTO) => ({
+                  size: sku.size,
+                  price: sku.price,
+                  stock: sku.stock,
+                  min_quantity: sku.min_quantity ?? 1,
+                  multiple_quantity: sku.multiple_quantity,
+                  code: sku.code ?? "",
+                })),
+              },
             })),
-          },
-        })),
-      },
+          }
+        : undefined,
     },
   });
 };
 
-//Metodo PUT
-export const updateProduct = async (id: string, data: any) => {
+// DELETE /products/:id (soft delete)
+export const deleteProduct = async (id: number) => {
   return prisma.products.update({
-    where: { id: Number(id) },
-    data,
-  });
-};
-
-//Delete
-export const deleteProduct = async (id: string) => {
-  return prisma.products.update({
-    where: { id: Number(id) },
-    data: { deleted_at: new Date() }
+    where: { id },
+    data: { deleted_at: new Date() },
   });
 };

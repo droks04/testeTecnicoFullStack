@@ -58,7 +58,7 @@ interface Product {
   name: string;
   reference: string;
   variants: Variant[];
-  product_images: ProductImage[];
+  images: string[]
   brands: { name: string };
   categories: { name: string };
 }
@@ -74,11 +74,6 @@ interface Sku {
   size: string;
   price: string;
   multiple_quantity: number;
-}
-
-interface ProductImage {
-  id: number;
-  url: string;
 }
 
 const App: React.FC = () => {
@@ -173,7 +168,7 @@ const nextProduct = () => {
       <ContainerCarousel>
         {currentProduct && (
          <ProductImageCarousel 
-            images={currentProduct.product_images.map(img => `http://localhost:3333/${img.url}`)}
+            images={currentProduct.images}
             content={{
               name: currentProduct.name,
               reference: currentProduct.reference,
