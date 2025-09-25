@@ -56,19 +56,15 @@ Abra no navegador para testar todas as funcionalidades
 
 - **Corpo JSON para teste do método POST**  
   Contém os dados preenchidos para testar a criação de registros via endpoint POST.  
-  [Corpo JSON para teste POST](.testeTecnico2/dumps_json/post-json-vazio.json)
-
-- **Corpo JSON para teste do método PUT**  
-  Contém os dados preenchidos para testar a atualização de registros via endpoint PUT.  
-  [Corpo JSON para teste PUT](.testeTecnico2/dumps_json/json-pronto.json)  
+  [Corpo JSON para teste POST](./testeTecnico2/dumps_json/post-json-vazio.json)
 
 - **Dump da tabela de imagens**  
   Contém a estrutura da tabela que foi criada para armazenar os caminhos das imagens, permitindo retorná-las pelo servidor.  
-  [Corpo JSON para teste PUT](.testeTecnico2/dumps_json/tabela_images.sql)  
+  [Dump para criação da tabela + insert de registros](./testeTecnico2/dumps_json/product_images_dump.sql)  
   > Observação: além dessa tabela, **nenhuma outra tabela foi criada**. Todas as demais tabelas utilizadas são as fornecidas na dump disponibilizada.
 
 - **Collection do postman**
   Contém a collection que usei para testar os métodos.  
-  [Collection Postman](.testeTecnico2/dumps_json/ecatalogos.postman_collection.json)
+  [Collection Postman](./testeTecnico2/dumps_json/ecatalogos.postman_collection.json)
   
 
